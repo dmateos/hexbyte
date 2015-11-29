@@ -1,4 +1,4 @@
-hex = function(xp, yp) {
+Hex = function(xp, yp) {
   var texture = PIXI.Texture.fromImage("assets/hex.png");
   var texture_green = PIXI.Texture.fromImage("assets/hex_green.png");
   var sprite = new PIXI.Sprite(texture);
@@ -7,11 +7,11 @@ hex = function(xp, yp) {
   var y = yp;
 
   var north;
-  this.south;
-  this.north_left;
-  this.north_right;
-  this.south_left;
-  this.south_right;
+  var south;
+  var north_east;
+  var north_west;
+  var south_east;
+  var south_west;
 
   sprite.anchor.x = 0;
   sprite.anchor.y = 0;
@@ -33,13 +33,38 @@ hex = function(xp, yp) {
     sprite.texture = texture_green;
   }
 
-  this.set_north = function(n) {
-    north = n
+  this.set_normal = function() {
+    sprite.texture = texture;
   }
 
-  sprite.click = function(mouseData) {
+  this.set_neighbour = function(neighbour_direction, neighbour) {
+    switch (neighbour_direction) {
+      case "north":
+        north = neighbour;
+        break;
+      case "north_east":
+        north_east = neighbour;
+        break;
+      case "north_west":
+        north_west = neighbour;
+        break;
+      case "south":
+        south = neighbour;
+        break;
+      case "south_east":
+        south_east = neighbour;
+        break;
+      case "south_west":
+        south_west = neighbour;
+        break;
+    }
+  }
+
+  sprite.mouseover = function(mouseData) {
     console.log(x + " " + y);
+
     sprite.texture = texture_green;
-    north.set_green();
+    //south.set_green();
+    //south_west.set_green();
   }
 }

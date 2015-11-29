@@ -1,4 +1,4 @@
-game = function() {
+Game = function() {
   var stage = new PIXI.Container();
   var renderer = PIXI.autoDetectRenderer(1280, 1024);
 
@@ -7,7 +7,7 @@ game = function() {
   document.body.appendChild(renderer.view);
   requestAnimationFrame(animate);
 
-  board = new board(stage);
+  board = new Board(stage);
 
   function animate() {
     requestAnimationFrame(animate);
