@@ -1,22 +1,38 @@
 Board = function(container) {
-  var x_max = 24;
-  var y_max = 24;
+  var x_max = 256;
+  var y_max = 256;
   var container = container;
   var hexes = new Array();
 
   PIXI.loader
-    .add("waterHex", "assets/waterHex.gif")
-    .add("woodHex", "assets/clayHex.gif")
+    .add("waterHex", "assets/water_hex.png")
+    .add("grassHex", "assets/grass_hex.png")
+    .add("snowHex", "assets/snow_hex.png")
+    .add("sandHex", "assets/sand_hex.png")
+    .add("denseGrassHex", "assets/dense_grass_hex.png")
     .load(function(loader, resources) {
       build_hexgrid(resources);
       compute_hexgrid_neighbours();
     });
 
   var build_hexgrid = function(resources) {
+    noise.seed(Math.random());
+
     for(var x = 0; x < x_max; x++) {
       var line = new Array();
       for(var y = 0; y < y_max; y++) {
-        var h = new Hex(x, y, resources.woodHex.texture);
+        var value = Math.abs(noise.simplex2(x / 100, y / 100));
+        if(value < 0.08) {
+          var h = new Hex(x, y, resources.waterHex.texture);
+        } else if(value < 0.1) {
+          var h = new Hex(x, y, resources.sandHex.texture);
+        } else if(value < 0.4) {
+          var h = new Hex(x, y, resources.grassHex.texture);
+        } else if(value < 0.8) {
+          var h = new Hex(x, y, resources.denseGrassHex.texture);
+        } else {
+          var h = new Hex(x, y, resources.snowHex.texture);
+        }
         line.push(h);
         container.addChild(h.get_sprite());
       }
@@ -64,4 +80,9 @@ Board = function(container) {
   this.render = function(renderer) {
      renderer.render(container);
   }
+
+  this.get_container = function() {
+    return container;
+  }
+  
 }
